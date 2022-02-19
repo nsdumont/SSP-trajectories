@@ -213,6 +213,12 @@ class SSPSpace:
         s[0] = 1
         return s
     
+    def bind(self,a,b):
+        return np.fft.ifft(np.fft.fft(a) * np.fft.fft(b)).real
+    
+    def invert(self,a):
+        return a[-np.arange(len(a))]
+    
     def similarity_plot(self,ssp,n_grid=100,plot_type='heatmap',cmap="YlGnBu",ax=None,**kwargs):
         if ax is None:
             fig = plt.figure()
@@ -254,7 +260,7 @@ class HexagonalSSPSpace(SSPSpace):
                  scale_min=2*np.pi/np.sqrt(6) - 0.5, scale_max=2*np.pi/np.sqrt(6) + 0.5,
                  domain_bounds=None, length_scale=1):
         if (n_rotates==5) & (n_scales==5) & (ssp_dim!=151): # user wants to define ssp with total dim, not number of simplex rotates and scales
-            n_rotates = int(np.sqrt(ssp_dim//2))
+            n_rotates = int(np.sqrt((ssp_dim-1)/(2*(domain_dim+1))))
             n_scales = n_rotates
             ssp_dim = n_rotates*n_scales*(domain_dim+1)*2 + 1
 
