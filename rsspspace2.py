@@ -5,7 +5,7 @@ from scipy.optimize import minimize
 
 import warnings
 
-class RSSPSpace:
+class RSSPSpace2:
     def __init__(self,  domain_dim:int,ssp_dim: int, axis_matrix=None, phase_matrix=None,
                  domain_bounds=None, length_scale=lambda x: np.ones(x.shape)): 
         self.domain_dim = domain_dim
@@ -44,7 +44,7 @@ class RSSPSpace:
         #data = np.fft.ifft( np.exp( 1.j * self.phase_matrix(x) @ (x / self.length_scale(x)).T), axis=0 ).real
         
         data = np.zeros((self.ssp_dim,x.shape[0]))
-        scaled_x = x / self.length_scale(x)
+        scaled_x = self.length_scale(x)
         for i in range(x.shape[0]):
             #print(x[i,:].shape)
             data[:,i] = np.fft.ifft(np.prod(np.fft.fft(self.axis_matrix(x[i,:]), axis=0)**scaled_x[i,:], axis=1), axis=0).real
